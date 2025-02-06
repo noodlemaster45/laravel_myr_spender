@@ -14,4 +14,5 @@ Route::middleware(['middleware' => 'auth:api'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('add', [TransactionController::class, 'store']);
     Route::put('update/{id}', [TransactionController::class, 'update']);
+    Route::delete('delete/{id}', [TransactionController::class, 'destroy']);
 });

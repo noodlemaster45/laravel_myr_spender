@@ -76,10 +76,10 @@ class TransactionController extends Controller
             ]);
         }
         else{
-            $transModel->destr();
+            $transModel->destroy($id);
             return response()->json([
                 'status' => "true",
-                'message' => 'transaction edited'
+                'message' => 'transaction deleted'
             ]);
         }
     }
