@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Validator;
 
 class TransactionController extends Controller
 {
@@ -19,7 +21,7 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TransactionRequest $request)
     {
         Transaction::create([
             "user_id" => auth()->user()->id,
@@ -43,7 +45,7 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(TransactionRequest $request, $id)
     {
         $transModel = Transaction::find($id);
         if($transModel->user_id != auth()->user()->id){
@@ -53,7 +55,7 @@ class TransactionController extends Controller
             ]);
         }
         else{
-            $transModel->update($request->all());
+            $transModel->update($request->validated());
             return response()->json([
                 'status' => "true",
                 'message' => 'transaction edited'
@@ -66,6 +68,19 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $transModel = Transaction::find($id);
+        if($transModel->user_id != auth()->user()->id){
+            return response()->json([
+                'status' => "false",
+                'message' => 'unathorized'
+            ]);
+        }
+        else{
+            $transModel->destr();
+            return response()->json([
+                'status' => "true",
+                'message' => 'transaction edited'
+            ]);
+        }
     }
 }
